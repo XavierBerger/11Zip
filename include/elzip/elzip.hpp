@@ -1,14 +1,16 @@
 #pragma once
 
-#include <fswrapper.hpp>
 #include <string>
+#include <vector>
+
+#include <fswrapper.hpp>
 
 namespace elz
 {
     class zip_exception : public std::runtime_error
     {
     public:
-        zip_exception(const std::string& error);
+        explicit zip_exception(const std::string& error);
         ~zip_exception() override = default;
     };
 
@@ -21,4 +23,5 @@ namespace elz
     void extractZip(const path& archive, const path& target = ".", const std::string& password = "");
     void extractFile(const path& archive, const path& fileInArchive, const path& target = ".", std::string outFilename = "", const std::string& password = "");
     void zipFolder(const path& folder, path archivePath = "");
+    void zipFiles(const std::vector<path>& files, const path& archivePath = "archive.zip");
 }  // namespace elz

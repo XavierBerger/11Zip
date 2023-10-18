@@ -18,7 +18,7 @@ namespace elz
         {
             throw zip_exception("error on resolving path of entry : '" + entry + "'");
         }
-        return std::string(buf.data());
+        return buf.data();
     }
 
     void _extractFile(ziputils::unzipper& zipFile, const path& filename, const path& target, const std::string& password = "")
@@ -97,6 +97,21 @@ namespace elz
 
             zipper << fileContent;
 
+            zipper.closeEntry();
+        }
+        zipper.close();
+    }
+
+    void zipFiles(const std::vector<path>& files, const path& archivePath)
+    {
+        ziputils::zipper zipper;
+        zipper.open(archivePath.string().c_str());
+        for (const auto& file : files)
+        {
+            zipper.addEntry(file.string().c_str());
+            std::ifstream fileContent;
+            fileContent.open(file.string(), std::ifstream::in | std::ifstream::binary);
+            zipper << fileContent;
             zipper.closeEntry();
         }
         zipper.close();
